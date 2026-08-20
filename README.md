@@ -58,14 +58,19 @@ Open to     Interesting collaborations and thoughtful technical conversations
 
 ## GitHub in motion
 
+<!-- Generated daily by .github/workflows/metrics.yml and committed to metrics/.
+     These are static files in this repo, so they cannot rate-limit or 503 the
+     way the shared Vercel widgets do. Do not add width/height attributes —
+     the SVGs have no viewBox, so forcing a size distorts them. -->
+
 <div align="center">
 
-<a href="https://github.com/marven250"><img height="180" src="https://github-readme-stats.vercel.app/api?username=marven250&show_icons=true&hide_border=true&count_private=true&include_all_commits=true&bg_color=0f172a&title_color=38bdf8&text_color=cbd5e1&icon_color=f59e0b&ring_color=2563eb" alt="Marven's GitHub statistics" /></a>
-<a href="https://github.com/marven250"><img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=marven250&layout=compact&hide_border=true&langs_count=8&bg_color=0f172a&title_color=38bdf8&text_color=cbd5e1" alt="Most used languages" /></a>
+<img src="metrics/overview.svg" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
 
 <br />
 
-<img src="https://streak-stats.demolab.com?user=marven250&theme=transparent&hide_border=true&background=0F172A&ring=38BDF8&fire=F59E0B&currStreakLabel=38BDF8&sideLabels=CBD5E1&dates=94A3B8&currStreakNum=FFFFFF&sideNums=FFFFFF" alt="GitHub contribution streak" />
+<img src="metrics/calendar.svg" alt="A year of contributions as an isometric calendar" />
+<img src="metrics/languages.svg" alt="Most used languages by bytes and percentage" />
 
 </div>
 
@@ -94,7 +99,11 @@ Open to     Interesting collaborations and thoughtful technical conversations
 
 <div align="center">
 
-<img src="https://github-profile-trophy.vercel.app/?username=marven250&theme=flat&no-frame=true&no-bg=true&margin-w=8&column=6" width="96%" alt="GitHub profile trophies" />
+<img src="metrics/achievements.svg" alt="Unlocked GitHub achievements" />
+
+<br />
+
+<img src="metrics/habits.svg" alt="Coding habits: most active days and hours" />
 
 </div>
 

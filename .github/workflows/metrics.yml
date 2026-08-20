@@ -1,0 +1,159 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Renders the profile stat cards as static SVGs and commits them to metrics/.
+#
+# WHY: the shared public instances (github-readme-stats.vercel.app,
+# github-profile-trophy.vercel.app) serve millions of READMEs from one GitHub
+# API budget and one Vercel quota. When either runs dry they return 503 / 402
+# and your profile shows broken images. Generating the SVGs here means the
+# images are files in this repo — nothing to rate-limit at page load.
+#
+# ONE-TIME SETUP:
+#   1. Create a classic PAT:  https://github.com/settings/tokens/new
+#        - Note:   metrics
+#        - Expiry: no expiration (or set a reminder to rotate)
+#        - Scopes: none required. Tick `public_repo` only if you also want
+#                  private-repo counts, in which case use `repo` instead.
+#   2. Add it here as a repository secret named METRICS_TOKEN:
+#        https://github.com/marven250/marven250/settings/secrets/actions
+#   3. Actions tab -> "Profile metrics" -> Run workflow.
+#
+# A personal token is required (not the built-in GITHUB_TOKEN) because this
+# reads account-level data that repo-scoped tokens cannot see. Commits still
+# use the built-in token via the `contents: write` permission below.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Profile metrics
+
+on:
+  schedule:
+    # 05:20 UTC daily — off the hour to avoid GitHub's cron congestion
+    - cron: "20 5 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/metrics.yml
+
+permissions:
+  contents: write
+
+# Never let two runs commit at once
+concurrency:
+  group: profile-metrics
+  cancel-in-progress: false
+
+env:
+  # Shared theme so every card matches the README palette.
+  # extras_css is injected after the template stylesheet, so equal-specificity
+  # rules win without needing !important.
+  THEME_CSS: |
+    svg {
+      background-color: #0f172a;
+      color: #cbd5e1;
+      --color-calendar-graph-day-bg: #172033;
+      --color-calendar-graph-day-border: #1e293b;
+      --color-calendar-graph-day-L1-bg: #0c4a6e;
+      --color-calendar-graph-day-L1-border: #0c4a6e;
+      --color-calendar-graph-day-L2-bg: #0369a1;
+      --color-calendar-graph-day-L2-border: #0369a1;
+      --color-calendar-graph-day-L3-bg: #0ea5e9;
+      --color-calendar-graph-day-L3-border: #0ea5e9;
+      --color-calendar-graph-day-L4-bg: #7dd3fc;
+      --color-calendar-graph-day-L4-border: #7dd3fc;
+    }
+    h1, h2, h3 { color: #38bdf8; }
+    .field svg { fill: #94a3b8; }
+    .activity .code { background-color: #38bdf81f; color: #7dd3fc; }
+    .label { background-color: #38bdf826; color: #7dd3fc; }
+    .contribution.organization { border-color: #334155; background-color: #ffffff0a; }
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # Replaces: github-readme-stats.vercel.app/api  (was 503)
+      - name: Overview
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: marven250
+          filename: metrics/overview.svg
+          template: classic
+          base: header, activity, community, repositories
+          config_timezone: America/New_York
+          config_display: large
+          config_padding: 4%, 8%
+          plugin_lines: yes
+          plugin_followup: yes
+          extras_css: ${{ env.THEME_CSS }}
+          committer_message: "chore(metrics): refresh overview"
+
+      # Replaces: github-readme-stats.vercel.app/api/top-langs  (was 503)
+      - name: Languages
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: marven250
+          filename: metrics/languages.svg
+          template: classic
+          base: ""
+          config_timezone: America/New_York
+          config_padding: 4%, 8%
+          plugin_languages: yes
+          plugin_languages_details: percentage, bytes-size
+          plugin_languages_limit: 8
+          extras_css: ${{ env.THEME_CSS }}
+          committer_message: "chore(metrics): refresh languages"
+
+      # Replaces: streak-stats.demolab.com  (was rendering an error card)
+      - name: Calendar
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: marven250
+          filename: metrics/calendar.svg
+          template: classic
+          base: ""
+          config_timezone: America/New_York
+          config_padding: 4%, 8%
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          extras_css: ${{ env.THEME_CSS }}
+          committer_message: "chore(metrics): refresh calendar"
+
+      # Replaces: github-profile-trophy.vercel.app  (was 402)
+      - name: Achievements
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: marven250
+          filename: metrics/achievements.svg
+          template: classic
+          base: ""
+          config_timezone: America/New_York
+          config_display: large
+          config_padding: 4%, 8%
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          plugin_achievements_threshold: C
+          extras_css: ${{ env.THEME_CSS }}
+          committer_message: "chore(metrics): refresh achievements"
+
+      # Bonus: when during the week/day the commits actually happen
+      - name: Habits
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: marven250
+          filename: metrics/habits.svg
+          template: classic
+          base: ""
+          config_timezone: America/New_York
+          config_padding: 4%, 8%
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_charts: yes
+          extras_css: ${{ env.THEME_CSS }}
+          committer_message: "chore(metrics): refresh habits"
