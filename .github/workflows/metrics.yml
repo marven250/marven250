@@ -145,3 +145,63 @@ jobs:
       #   by date *before* this, so it should start working once the offending
       #   event ages past plugin_habits_days (default 14). Worth retrying then.
       # ───────────────────────────────────────────────────────────────────────
+
+      # ───────────────────────────────────────────────────────────────────────
+      # metrics emits `width="960" height="341"` with NO viewBox. GitHub's
+      # `max-width: 100%` then shrinks the SVG *viewport* without rescaling the
+      # internal coordinate system, so anything past the ~830px content column
+      # is clipped off the right edge instead of scaling down.
+      #
+      # Injecting a viewBox that matches width/height makes the card scale
+      # proportionally, which is what lets the README render it at width="100%".
+      # This has to run after the steps above, since those commit via the API
+      # rather than through the workspace — hence the checkout here, not at the
+      # top of the job.
+      # ───────────────────────────────────────────────────────────────────────
+      - name: Check out the freshly committed cards
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Inject a viewBox so the cards scale instead of clipping
+        run: |
+          python3 - <<'PY'
+          import glob, pathlib, re
+
+          patched, skipped = [], []
+          for p in sorted(glob.glob("metrics/*.svg")):
+              f = pathlib.Path(p)
+              t = f.read_text(encoding="utf-8")
+              m = re.match(r"<svg\b[^>]*?>", t)
+              if not m:
+                  skipped.append((p, "no root <svg> tag at start")); continue
+              tag = m.group(0)
+              if "viewBox" in tag:
+                  skipped.append((p, "already has viewBox")); continue
+              w = re.search(r'\bwidth="([\d.]+)"', tag)
+              h = re.search(r'\bheight="([\d.]+)"', tag)
+              if not (w and h):
+                  skipped.append((p, "width/height not numeric")); continue
+              f.write_text(
+                  f'<svg viewBox="0 0 {w.group(1)} {h.group(1)}"' + tag[4:] + t[m.end():],
+                  encoding="utf-8",
+              )
+              patched.append(f"{p} -> viewBox 0 0 {w.group(1)} {h.group(1)}")
+
+          for x in patched: print("patched:", x)
+          for p, why in skipped: print("skipped:", p, "-", why)
+          if not patched: print("nothing to patch")
+          PY
+
+      - name: Commit the responsive cards
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics
+          if git diff --cached --quiet; then
+            echo "no viewBox changes to commit"
+          else
+            git commit -m "chore(metrics): add viewBox so cards scale instead of clipping"
+            git push
+          fi

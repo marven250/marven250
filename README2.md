@@ -102,17 +102,18 @@ learning out loud. Both are on purpose.
      and committed to metrics/. Nothing is fetched from a third-party server at
      page load, so nothing here can 503, 402, or rate-limit.
 
-     Do NOT add width/height attributes: lowlighter/metrics emits SVGs with a
-     fixed width and no viewBox, so forcing a size distorts the output. -->
+     metrics emits a fixed width with no viewBox, which GitHub then clips
+     rather than scales. The workflow injects a matching viewBox after each
+     render, which is what makes these percentage widths safe. -->
 
 <div align="center">
 
-<img src="metrics/overview.svg" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
+<img src="metrics/overview.svg" width="100%" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
 
 <br />
 
-<img src="metrics/calendar.svg" alt="A year of contributions rendered as an isometric calendar" />
-<img src="metrics/languages.svg" alt="Most used languages by bytes and percentage" />
+<img src="metrics/calendar.svg" width="49%" alt="A year of contributions rendered as an isometric calendar" />
+<img src="metrics/languages.svg" width="49%" alt="Most used languages by bytes and percentage" />
 
 </div>
 

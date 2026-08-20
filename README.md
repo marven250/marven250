@@ -60,17 +60,21 @@ Open to     Interesting collaborations and thoughtful technical conversations
 
 <!-- Generated daily by .github/workflows/metrics.yml and committed to metrics/.
      These are static files in this repo, so they cannot rate-limit or 503 the
-     way the shared Vercel widgets do. Do not add width/height attributes —
-     the SVGs have no viewBox, so forcing a size distorts them. -->
+     way the shared Vercel widgets do.
+
+     The workflow injects a viewBox into each card after generating it, which
+     is what makes these percentage widths safe: without one, GitHub shrinks
+     the SVG viewport without rescaling its coordinates and clips the right
+     edge. Keep the two paired cards at 49% so they fit one row together. -->
 
 <div align="center">
 
-<img src="metrics/overview.svg" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
+<img src="metrics/overview.svg" width="100%" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
 
 <br />
 
-<img src="metrics/calendar.svg" alt="A year of contributions as an isometric calendar" />
-<img src="metrics/languages.svg" alt="Most used languages by bytes and percentage" />
+<img src="metrics/calendar.svg" width="49%" alt="A year of contributions as an isometric calendar" />
+<img src="metrics/languages.svg" width="49%" alt="Most used languages by bytes and percentage" />
 
 </div>
 
@@ -78,7 +82,7 @@ Open to     Interesting collaborations and thoughtful technical conversations
 
 <div align="center">
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=marven250&bg_color=0f172a&color=cbd5e1&line=38bdf8&point=f59e0b&area=true&hide_border=true&custom_title=The%20commit%20story" width="96%" alt="GitHub contribution activity graph" />
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=marven250&bg_color=0f172a&color=cbd5e1&line=38bdf8&point=f59e0b&area=true&hide_border=true&custom_title=The%20commit%20story" width="100%" alt="GitHub contribution activity graph" />
 
 </div>
 
@@ -90,6 +94,18 @@ Open to     Interesting collaborations and thoughtful technical conversations
 - Strengthening my foundations across scripting, systems, and developer tooling
 - Turning notes, experiments, and lessons learned into useful documentation
 - Finding the smallest reliable solution to the biggest practical problem
+
+</details>
+
+<details>
+<summary><strong>A little more signal</strong></summary>
+<br />
+
+<div align="center">
+
+<img src="metrics/overview.svg" width="100%" alt="Overview of Marven's GitHub activity, community involvement, and repositories" />
+
+</div>
 
 </details>
 
