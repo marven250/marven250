@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 12" width="1000" height="12" role="img" aria-label="decorative animated divider">
+  <defs>
+    <linearGradient id="dLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#38bdf8" stop-opacity="0.55"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.75"/>
+      <stop offset="80%" stop-color="#2563eb" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="dGlow" x="-200%" y="-400%" width="500%" height="900%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <line x1="0" y1="6" x2="1000" y2="6" stroke="url(#dLine)" stroke-width="1.5"/>
+
+  <circle cy="6" r="3" fill="#7dd3fc" filter="url(#dGlow)">
+    <animate attributeName="cx" values="-20;1020" dur="5.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="5.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cy="6" r="2" fill="#f59e0b" filter="url(#dGlow)">
+    <animate attributeName="cx" values="1020;-20" dur="8s" begin="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="8s" begin="1.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>
