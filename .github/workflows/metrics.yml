@@ -86,7 +86,13 @@ jobs:
           config_display: large
           config_padding: 4%, 8%
           plugin_lines: yes
+          # followup defaults to the `repositories` section only, which counts
+          # issues and PRs other people opened *on* marven250's repos — that is
+          # genuinely zero, so every bar rendered empty (and the zero total made
+          # the bar offsets NaN). `user` is the side with real numbers: issues
+          # and PRs marven250 has opened across GitHub.
           plugin_followup: yes
+          plugin_followup_sections: repositories, user
           extras_css: ${{ env.THEME_CSS }}
           committer_message: "chore(metrics): refresh overview"
 
