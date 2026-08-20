@@ -114,10 +114,6 @@ learning out loud. Both are on purpose.
 <img src="metrics/calendar.svg" alt="A year of contributions rendered as an isometric calendar" />
 <img src="metrics/languages.svg" alt="Most used languages by bytes and percentage" />
 
-<br />
-
-<img src="metrics/habits.svg" alt="Coding habits: which days and hours the commits actually land" />
-
 </div>
 
 <div align="center"><img src="assets/divider.svg" width="100%" alt="" /></div>
@@ -189,13 +185,22 @@ that failure mode entirely.
 </details>
 
 <details>
-<summary><b>&nbsp;Achievements</b></summary>
+<summary><b>&nbsp;Known gaps</b></summary>
 <br />
-<div align="center">
 
-<img src="metrics/achievements.svg" alt="Unlocked GitHub achievements" />
+Two cards are deliberately absent. Both are upstream bugs in
+[`lowlighter/metrics`](https://github.com/lowlighter/metrics) that no amount of
+configuration fixes, so they'd render an error box rather than a card:
 
-</div>
+- **Achievements** — the plugin's GraphQL query still asks for `user.projects`
+  (Projects *classic*), which GitHub has sunset. The API returns `NOT_FOUND`
+  and nulls the whole response. GitHub already shows real achievement badges
+  on the profile sidebar, so nothing is lost.
+- **Habits** — the plugin flat-maps `payload.commits` without a null guard, and
+  push events that carry no commits array (branch creates, force pushes) crash
+  it. Should resolve itself once the offending event ages out of the 14-day
+  window.
+
 </details>
 
 <div align="center">

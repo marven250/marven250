@@ -93,22 +93,6 @@ Open to     Interesting collaborations and thoughtful technical conversations
 
 </details>
 
-<details>
-<summary><strong>A little more signal</strong></summary>
-<br />
-
-<div align="center">
-
-<img src="metrics/achievements.svg" alt="Unlocked GitHub achievements" />
-
-<br />
-
-<img src="metrics/habits.svg" alt="Coding habits: most active days and hours" />
-
-</div>
-
-</details>
-
 <div align="center">
 
 ### Thanks for stopping by
